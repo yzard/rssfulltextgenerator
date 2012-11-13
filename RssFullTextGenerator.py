@@ -50,13 +50,13 @@ class RssFullTextGenerator:
 			print 'Error when opening link:', link
 			return None
 
-	def writeToDisk(self, string):
-		pickle.dump(self.items, fp)
+	def writeTo(self, string):
+		pickle.dump(self.items, string)
 		
-	def readFromDisk(self, fp):
+	def readFrom(self, string):
 		import pickle
 		try:
-			self.items = pickle.load(fp)
+			self.items = pickle.load(string)
 		except:
 			self.items = list()
 
@@ -122,8 +122,22 @@ class RssFullTextGenerator:
 if __name__ == '__main__':
 	url = 'http://www.cnbeta.com/backend.php?atom'
 	feed = RssFullTextGenerator('cnBeta', url, 60)
-	fp = open('tmp.rss', 'wb')
+
+	cache = StringIO.StringIO(open('cnBeta', 'rb').read())
+	feed.readFrom(cache)
 	s = feed.generate()
-	fp.write(s)
-	fp.close()
+
+	# get new cache
+	cache = StringIO.StringIO()
+	feed.writeTo(cache)
+
+	# write cache	
+	f = open('cnBeta', 'wb')
+	f.write(cache.getvalue())
+	f.close()
+
+	# write rss file
+	rss = open('tmp.rss', 'wb')
+	rss.write(s)
+	rss.close()
 
