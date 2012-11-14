@@ -7,6 +7,7 @@ class DownloadHandler(webapp2.RequestHandler):
 	def get(self, resource):
 		resource = str(urllib.unquote(resource))
 		data = memcache.get(resource)	
+		self.response.headers['Content-Type'] = 'application/rss+xml'
 		self.response.out.write(data)
 
 app = webapp2.WSGIApplication([

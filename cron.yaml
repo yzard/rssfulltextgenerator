@@ -1,4 +1,4 @@
 cron:
 - description: update all rss feeds
-  url: /task/generate_all
+  url: /generate_all.app
   schedule: every 10 minute 
