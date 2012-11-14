@@ -56,7 +56,10 @@ class RssFullTextGenerator:
 	def readFrom(self, string):
 		import pickle
 		try:
-			self.items = pickle.load(string)
+			if string:
+				self.items = pickle.load(string)
+			else:
+				self.items = list()
 		except:
 			self.items = list()
 
