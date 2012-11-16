@@ -8,14 +8,15 @@ import feedparser
 import feedgenerator
 import httplib2
 
+import Encoding
+
 class RssFullTextGenerator:
-	def __init__(self, func, url, number, count = 1):
+	def __init__(self, func, url, number):
 		# link : content 
 		self.func = func 
 		self.func_name = func.__name__
 		self.url = url
 		self.number = number
-		self.count = count
 		self.items = list()
 
 	def _find(self, link):
@@ -29,10 +30,14 @@ class RssFullTextGenerator:
 		try:
 			h = httplib2.Http()
 			response, content = h.request(link, 'GET',)
+			content = Encoding.decode_ignore(content, 'gb18030')
+			content = Encoding.encode_ignore(content, 'utf-8')
 			return self.func(content)
-		except:
-			print 'Error when opening link:', link
-			return None
+		except KeyboardInterrupt:
+			raise KeyboardInterrupt
+		except UnicodeDecodeError:
+		 	print 'Decoding', link, 'failed'
+			raise UnicodeDecodeError
 
 	def setItems(self, items):
 		if items != None:
@@ -71,13 +76,15 @@ class RssFullTextGenerator:
 		newItems = feed['items']
 		newItems.reverse()
 
-		count = 0
 		# process from the oldest to newest
 		print 'Total number of pages: ', len(newItems)
 		for i in newItems:
 			if self._find(i['title']):
+				print '- skipping', i['title']
 				continue
 			
+			print '- processing', i['title']
+
 			# get full text content
 			content = None
 			while not content:
@@ -93,10 +100,6 @@ class RssFullTextGenerator:
 			# drop old one
 			if len(self.items) > self.number:
 				self.items.pop(0)
-
-			count += 1
-			if count == self.count:
-				break
 
 	def generate(self):
 		self._parseFeed()

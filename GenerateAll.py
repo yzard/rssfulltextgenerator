@@ -11,12 +11,15 @@ class GenerateAll():
 		cache_key = '%s.cache' % (func_name.lower())
 		rss_key = '%s.xml' % (func_name.lower())
 
+		cache_path = '/'.join([OUTPUT_CACHE_DIRECTORY, cache_key])
+		rss_path = '/'.join([OUTPUT_XML_DIRECTORY, rss_key])
+
 		# generate feed object
 		feed = RssFullTextGenerator(site['func'], site['url'], site['num'])
 
 		# get cache from memcache if exists and load it
 		try:
-			cache_file = open('/'.join(OUTPUT_CACHE_DIRECTORY, cache_key), 'rb')
+			cache_file = open(cache_path, 'rb')
 			cache = pickle.load(cache_file)
 		except:
 			cache = None
@@ -27,12 +30,12 @@ class GenerateAll():
 	
 		# get new cache and write it into memcache
 		cache = feed.getItems()
-		cache_file = open('/'.join(OUTPUT_CACHE_DIRECTORY, cache_key), 'wb')
+		cache_file = open(cache_path, 'wb')
 		pickle.dump(cache, cache_file)
 		cache_file.close()
 
 		# write rss file to memcache
-		xml_file = open('/'.join(OUTPUT_XML_DIRECTORY, rss_key), 'w')
+		xml_file = open(rss_path, 'w')
 		xml_file.write(rss)
 		xml_file.close()
 
