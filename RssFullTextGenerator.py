@@ -8,8 +8,6 @@ import feedparser
 import feedgenerator
 import httplib2
 
-import Encoding
-
 class RssFullTextGenerator:
 	def __init__(self, func, url, number):
 		# link : content 
@@ -30,14 +28,14 @@ class RssFullTextGenerator:
 		try:
 			h = httplib2.Http()
 			response, content = h.request(link, 'GET',)
-			content = Encoding.decode_ignore(content, 'gb18030')
-			content = Encoding.encode_ignore(content, 'utf-8')
 			return self.func(content)
 		except KeyboardInterrupt:
 			raise KeyboardInterrupt
 		except UnicodeDecodeError:
 		 	print 'Decoding', link, 'failed'
 			raise UnicodeDecodeError
+		except:
+		 	return None
 
 	def setItems(self, items):
 		if items != None:
