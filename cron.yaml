@@ -1,0 +1,4 @@
+cron:
+- description: update all rss feeds
+  url: /task/generate_all
+  schedule: every 10 minute 
