@@ -2,18 +2,13 @@
 
 import re
 import datetime
+import pickle
+import StringIO
 
 import feedparser
 import feedgenerator
 import httplib2
 from bs4 import BeautifulSoup
-
-[
-{
-	'func' : 'cnBeta',
-	'url' : 'http://www.cnbeta.com/backend.php?atom'
-}
-]
 
 def cnBeta(raw):
 	raw = raw.decode('gb18030').encode('utf-8')
@@ -37,6 +32,7 @@ class RssFullTextGenerator:
 		self.func = globals()[func_name] 
 		self.url = url
 		self.number = number
+		self.items = list()
 
 	def _find(self, link):
 		for item in self.items:
@@ -54,18 +50,13 @@ class RssFullTextGenerator:
 			print 'Error when opening link:', link
 			return None
 
-	def _writeToDisk(self):
-		import pickle
-		f = open(self.func_name, 'wb')
-		pickle.dump(self.items, f)
-		f.close()
+	def writeToDisk(self, string):
+		pickle.dump(self.items, fp)
 		
-	def _readFromDisk(self):
+	def readFromDisk(self, fp):
 		import pickle
 		try:
-			f = open(self.func_name, 'rb')
-			self.items = pickle.load(f)
-			f.close()
+			self.items = pickle.load(fp)
 		except:
 			self.items = list()
 
@@ -90,14 +81,11 @@ class RssFullTextGenerator:
 				description = item['description'],
 			)
 		
-		fp = open(self.func_name + '_full_text.rss', 'w')
-		feed.write(fp, 'utf-8')
-		fp.close()
+		s = StringIO.StringIO()
+		feed.write(s, 'utf-8')
+		return s.getvalue()
 
 	def _parseFeed(self):
-		# read self.items
-		self._readFromDisk()
-
 		feed = feedparser.parse(self.url)
 		newItems = feed['items']
 		newItems.reverse()
@@ -127,15 +115,15 @@ class RssFullTextGenerator:
 			if len(self.items) > self.number:
 				self.items.pop(0)
 
-		# write self.items
-		self._writeToDisk()
-		
 	def generate(self):
 		self._parseFeed()
-		self._generateRss()
+		return self._generateRss()
 
 if __name__ == '__main__':
 	url = 'http://www.cnbeta.com/backend.php?atom'
 	feed = RssFullTextGenerator('cnBeta', url, 60)
-	feed.generate()
+	fp = open('tmp.rss', 'wb')
+	s = feed.generate()
+	fp.write(s)
+	fp.close()
 
