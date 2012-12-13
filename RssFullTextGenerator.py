@@ -9,12 +9,13 @@ import feedgenerator
 import httplib2
 
 class RssFullTextGenerator:
-	def __init__(self, func, url, number):
+	def __init__(self, func, url, number, count = 1):
 		# link : content 
 		self.func = func 
 		self.func_name = func.__name__
 		self.url = url
 		self.number = number
+		self.count = count
 		self.items = list()
 
 	def _find(self, link):
@@ -70,15 +71,13 @@ class RssFullTextGenerator:
 		newItems = feed['items']
 		newItems.reverse()
 
+		count = 0
 		# process from the oldest to newest
 		print 'Total number of pages: ', len(newItems)
 		for i in newItems:
 			if self._find(i['title']):
-				#print '- skipping: ', i['title']
 				continue
 			
-			#print '- processing: ', i['title']
-
 			# get full text content
 			content = None
 			while not content:
@@ -94,6 +93,10 @@ class RssFullTextGenerator:
 			# drop old one
 			if len(self.items) > self.number:
 				self.items.pop(0)
+
+			count += 1
+			if count == self.count:
+				break
 
 	def generate(self):
 		self._parseFeed()
