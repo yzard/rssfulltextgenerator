@@ -10,10 +10,10 @@ import feedgenerator
 import httplib2
 
 class RssFullTextGenerator:
-	def __init__(self, func_name, url, number):
+	def __init__(self, func, url, number):
 		# link : content 
-		self.func_name = func_name
-		self.func = globals()[func_name] 
+		self.func = func 
+		self.func_name = func.__name__
 		self.url = url
 		self.number = number
 		self.items = list()
@@ -105,26 +105,4 @@ class RssFullTextGenerator:
 	def generate(self):
 		self._parseFeed()
 		return self._generateRss()
-
-if __name__ == '__main__':
-	url = 'http://www.cnbeta.com/backend.php?atom'
-	feed = RssFullTextGenerator('cnBeta', url, 60)
-
-	cache = StringIO.StringIO(open('cnBeta', 'rb').read())
-	feed.readFrom(cache)
-	s = feed.generate()
-
-	# get new cache
-	cache = StringIO.StringIO()
-	feed.writeTo(cache)
-
-	# write cache	
-	f = open('cnBeta', 'wb')
-	f.write(cache.getvalue())
-	f.close()
-
-	# write rss file
-	rss = open('tmp.rss', 'wb')
-	rss.write(s)
-	rss.close()
 

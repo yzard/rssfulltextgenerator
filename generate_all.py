@@ -6,14 +6,6 @@ from google.appengine.api import memcache
 from RssFullTextGenerator import RssFullTextGenerator
 from BeautifulSoup import BeautifulSoup
 
-infos =[
-{
-	'func' : 'cnBeta',
-	'url' : 'http://www.cnbeta.com/backend.php?atom',
-	'num' : 60,
-},
-]
-
 def cnBeta(raw):
 	raw = raw.decode('gb18030').encode('utf-8')
 	soup = BeautifulSoup(raw)
@@ -28,6 +20,15 @@ def cnBeta(raw):
 	result = str(content).replace('\n', '').replace('\r', '')
 
 	return result
+
+infos =[
+{
+	'func' : cnBeta,
+	'url' : 'http://www.cnbeta.com/backend.php?atom',
+	'num' : 60,
+},
+]
+
 
 class GenerateAll(webapp2.RequestHandler):
 	def get(self):
