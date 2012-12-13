@@ -2,7 +2,6 @@
 
 import re
 import datetime
-import pickle
 import StringIO
 
 import feedparser
@@ -34,18 +33,12 @@ class RssFullTextGenerator:
 			print 'Error when opening link:', link
 			return None
 
-	def writeTo(self, string):
-		pickle.dump(self.items, string)
-		
-	def readFrom(self, string):
-		import pickle
-		try:
-			if string:
-				self.items = pickle.load(string)
-			else:
-				self.items = list()
-		except:
-			self.items = list()
+	def setItems(self, items):
+		if items != None:
+			self.items = items
+
+	def getItems(self):
+		return self.items
 
 	def _generateRss(self):
 		# generate new xml file
@@ -81,10 +74,10 @@ class RssFullTextGenerator:
 		print 'Total number of pages: ', len(newItems)
 		for i in newItems:
 			if self._find(i['title']):
-				print '- skipping: ', i['title']
+				#print '- skipping: ', i['title']
 				continue
 			
-			print '- processing: ', i['title']
+			#print '- processing: ', i['title']
 
 			# get full text content
 			content = None
