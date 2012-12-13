@@ -8,22 +8,6 @@ import StringIO
 import feedparser
 import feedgenerator
 import httplib2
-from bs4 import BeautifulSoup
-
-def cnBeta(raw):
-	raw = raw.decode('gb18030').encode('utf-8')
-	soup = BeautifulSoup(raw)
-
-	content = soup.find(id='news_content')
-		
-	if not content:
-		return 'N/A'
-
-	# clean
-	#[x.extract() for x in content.find_all('script')]
-	result = str(content).replace('\n', '').replace('\r', '')
-
-	return result
 
 class RssFullTextGenerator:
 	def __init__(self, func_name, url, number):

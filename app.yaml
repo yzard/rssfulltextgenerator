@@ -5,11 +5,9 @@ api_version: 1
 threadsafe: false
 
 handlers:
-- url: /test
-  script: test.app
-
 - url: /rss/.*
   script: main.app
 
 - url: /generate_all
   script: generate_all.app
+
