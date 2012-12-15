@@ -4,35 +4,11 @@ import webapp2
 from google.appengine.api import memcache
 
 from RssFullTextGenerator import RssFullTextGenerator
-from BeautifulSoup import BeautifulSoup
-
-def cnBeta(raw):
-	raw = raw.decode('gb18030').encode('utf-8')
-	soup = BeautifulSoup(raw)
-
-	content = soup.find(id='news_content')
-		
-	if not content:
-		return 'N/A'
-
-	# clean
-	#[x.extract() for x in content.find_all('script')]
-	result = str(content).replace('\n', '').replace('\r', '')
-
-	return result
-
-infos =[
-{
-	'func' : cnBeta,
-	'url' : 'http://www.cnbeta.com/backend.php?atom',
-	'num' : 60,
-},
-]
-
+from Configure import Infos
 
 class GenerateAll(webapp2.RequestHandler):
 	def get(self):
-		for site in infos:
+		for site in Infos:
 			func_name = site['func'].__name__
 			cache_key = '%s.cache' % (func_name.lower())
 			rss_key = '%s.xml' % (func_name.lower())
