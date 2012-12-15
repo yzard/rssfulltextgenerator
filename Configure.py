@@ -4,8 +4,8 @@ import BeautifulSoup
 import Encoding 
 
 # output directory
-OUTPUT_XML_DIRECTORY='.'
-OUTPUT_CACHE_DIRECTORY='.'
+OUTPUT_XML_DIRECTORY='/var/www/html/rss'
+OUTPUT_CACHE_DIRECTORY='/home/zyin/rss_cache'
 
 def cnBeta(raw):
 	# decode and encoding

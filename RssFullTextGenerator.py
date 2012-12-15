@@ -78,11 +78,8 @@ class RssFullTextGenerator:
 		print 'Total number of pages: ', len(newItems)
 		for i in newItems:
 			if self._find(i['title']):
-				print '- skipping', i['title']
 				continue
 			
-			print '- processing', i['title']
-
 			# get full text content
 			content = None
 			while not content:
