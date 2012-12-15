@@ -1,15 +1,18 @@
 #!/usr/bin/python
 
-from BeautifulSoup import BeautifulSoup
+import BeautifulSoup
+import Encoding 
 
 # output directory
 OUTPUT_XML_DIRECTORY='.'
 OUTPUT_CACHE_DIRECTORY='.'
 
 def cnBeta(raw):
-	raw = raw.decode('gb18030').encode('utf-8')
-	soup = BeautifulSoup(raw)
+	# decode and encoding
+	raw = Encoding.decode_ignore(raw, 'gb18030')
+	raw = Encoding.encode_ignore(raw, 'utf-8')
 
+	soup = BeautifulSoup.BeautifulSoup(raw)
 	content = soup.find(id='news_content')
 		
 	if not content:
@@ -17,9 +20,7 @@ def cnBeta(raw):
 
 	# clean
 	result = str(content).replace('\n', '').replace('\r', '')
-
 	return result
-
 
 # parameters 
 Infos =[
