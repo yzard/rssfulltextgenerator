@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import BeautifulSoup
+from bs4 import BeautifulSoup
 import Encoding 
 
 # output directory
@@ -12,7 +12,7 @@ def cnBeta(raw):
 	raw = Encoding.decode_ignore(raw, 'gb18030')
 	raw = Encoding.encode_ignore(raw, 'utf-8')
 
-	soup = BeautifulSoup.BeautifulSoup(raw)
+	soup = BeautifulSoup(raw)
 	content = soup.find(id='news_content')
 		
 	if not content:

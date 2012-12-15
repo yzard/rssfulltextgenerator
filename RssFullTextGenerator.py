@@ -8,6 +8,8 @@ import feedparser
 import feedgenerator
 import httplib2
 
+import Encoding
+
 class RssFullTextGenerator:
 	def __init__(self, func, url, number):
 		# link : content 
@@ -21,8 +23,8 @@ class RssFullTextGenerator:
 		for item in self.items:
 			l = item['title']
 			if link == l:
-				return True
-		return False
+				return item['description']
+		return None
 
 	def _getContent(self, func, link):
 		try:

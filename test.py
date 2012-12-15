@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from Configure import *
 from RssFullTextGenerator import RssFullTextGenerator
 
 def main():
@@ -12,3 +13,5 @@ def main():
 	f.write(rss)
 	f.close()
 
+if __name__ == '__main__':
+	main()
