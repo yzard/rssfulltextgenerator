@@ -3,7 +3,7 @@
 import pickle
 
 from RssFullTextGenerator import RssFullTextGenerator
-from Configure import Infos, OUTPUT_XML_DIRECTORY
+from Configure import Infos, OUTPUT_XML_DIRECTORY, OUTPUT_CACHE_DIRECTORY
 
 class GenerateAll():
 	for site in Infos:
