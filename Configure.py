@@ -13,7 +13,7 @@ def cnBeta(raw):
 	raw = Encoding.encode_ignore(raw, 'utf-8')
 
 	soup = BeautifulSoup(raw)
-	content = soup.find(id='news_content')
+	content = soup.find(id='content')
 		
 	if not content:
 		return 'N/A'
