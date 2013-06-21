@@ -9,18 +9,20 @@ OUTPUT_CACHE_DIRECTORY='/home/zyin/rss_cache'
 
 def cnBeta(raw):
 	# decode and encoding
-	raw = Encoding.decode_ignore(raw, 'gb18030')
-	raw = Encoding.encode_ignore(raw, 'utf-8')
+	newRaw = Encoding.try_decode(raw)
+	if not newRaw:
+		print 'Try decoding failed'
+		return 'N/A'
+
+	newRaw = Encoding.encode_ignore(newRaw, 'utf-8')
 
 	soup = BeautifulSoup(raw)
-	content = soup.find(id='content')
-		
+	content = soup.find('div' , { 'class' : 'content'})
+
 	if not content:
 		return 'N/A'
 
-	# clean
-	result = str(content).replace('\n', '').replace('\r', '')
-	return result
+	return str(content).replace('\n', '').replace('\r', '')
 
 # parameters 
 Infos =[

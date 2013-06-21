@@ -33,11 +33,6 @@ class RssFullTextGenerator:
 			return self.func(content)
 		except KeyboardInterrupt:
 			raise KeyboardInterrupt
-		except UnicodeDecodeError:
-		 	print 'Decoding', link, 'failed'
-			raise UnicodeDecodeError
-		except:
-		 	return None
 
 	def setItems(self, items):
 		if items != None:
@@ -78,7 +73,10 @@ class RssFullTextGenerator:
 
 		# process from the oldest to newest
 		print 'Total number of pages: ', len(newItems)
+		num = 0
 		for i in newItems:
+			num += 1
+			print "Processing page (" + str(num) + "): " + i['link']
 			if self._find(i['title']):
 				continue
 			
